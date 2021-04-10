@@ -1,0 +1,96 @@
+#include<iostream>
+#include<vector> 
+#include "student.h"
+#include<iomanip>
+#include<sstream>
+#include<string>
+#include<fstream>
+using namespace std;
+
+
+void showmenu()
+		{
+			cout<<"\n\n\n"<<endl;
+		    cout<<"\n\n\t\t*********************** I LOVE C++ ************************"<<endl;
+		    cout<<"\n\n";
+		    cout<<"\t\t************************Students MIS*************************"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+			cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        1.Load Data             2.Show All Students        $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        3.Search Student        4.Add Student              $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        5.Modify Student        6.Delete Student           $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        7.Sort by StuNo         8.Sort by Name             $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        9.Sort by Gender        10.Sort by Phone           $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        11.Sort by WeChat       12.Sort by Dormtory        $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        13.Sort by Score        14.Statistics Data         $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        15.Clear Data           16.Save Data To File       $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$        17.Show Selected Data   18.Exit                    $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t$                                                           $"<<endl;
+		    cout<<"\t\t********************** Copyright@Jeet ***********************"<<endl;
+			
+		}
+
+int main(){
+	StudentMIS S;
+	
+	
+	
+	Student J;
+	
+	 //	S.LoadDefaultData();
+		
+			while(1)
+			{
+				showmenu();
+				cin.sync();
+				cin.clear();
+				int num;
+				cout<<"\n\n\t\tPlease choose menu number= ";
+				cin>> num ;
+					if(num==18){
+						//	Exit();					
+					}else{
+						switch(num)
+							{							
+								case 1:S.LoadData();
+									   S.backtoMenu();
+									   break;
+								case 2:
+									S.ShowTitle();
+									S.ShowData();
+									S.backtoMenu();
+									break;
+								case 3:S.Search();
+										S.backtoMenu();
+										break;
+								case 4:S.AddStudent();break;
+							 	case 5:S.ModifyStudnet();break;
+								case 6:S.Delete();break;
+								case 7:S.SortNo();S.backtoMenu();break;
+								case 8:S.SortName();S.backtoMenu();break;
+								case 9:S.SortGender();S.backtoMenu();break;
+							 	case 10:S.SortPhone();S.backtoMenu();break;
+							 	case 11:S.SortWechat();S.backtoMenu();break;
+								case 12:S.SortDormitory();S.backtoMenu();break;
+								case 13:S.SortScore();S.backtoMenu();break;
+								case 14:S.Statistic();break;
+							 	case 15:S.ClearData();
+								 		S.backtoMenu();
+										 break;
+								case 16:S.SavetoFile();S.backtoMenu();break;
+								case 17: J.ShowandHide();break;
+								default:
+									cout<<"\n\t\tInvalid input!!!"<<endl;	
+							}
+					}
+			}	
+}

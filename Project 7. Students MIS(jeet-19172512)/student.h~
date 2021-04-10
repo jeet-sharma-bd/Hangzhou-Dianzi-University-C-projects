@@ -1,0 +1,1034 @@
+#include<iostream>
+#include<vector> 
+#include<iomanip>
+#include<sstream>
+#include<string.h>
+#include<fstream>
+#include<iterator> 
+#include<algorithm>
+using namespace std;
+
+class Student{
+	
+	public:
+		string m_No;
+		string m_Name;
+		char m_Gender;
+		string m_Phone;
+		string m_Wechat;
+		string m_Dormitory;
+		double m_Score;
+		
+	public:
+	Student(string no, string name, char gender,string phone, string wechat, string dormitory, double score)
+	{
+		setNo(no);
+		setName(name);
+		setGender(gender);
+		setPhone(phone);
+		setWechat(wechat);
+		setDormitory(dormitory);
+		setScore(score);
+	}	
+	Student(const Student &stu)
+	{
+		m_No=stu.m_No;
+		m_Name=stu.m_Name;
+		m_Gender=stu.m_Gender;
+		m_Phone=stu.m_Phone;
+		m_Wechat=stu.m_Wechat;
+		m_Dormitory=stu.m_Dormitory;;
+		m_Score=stu.m_Score;
+	
+	}
+
+	public:
+	void setNo(string no){
+		m_No=no;
+	}
+	void setName(string name){
+		m_Name=name;
+	}
+	void setGender(char gender){
+		m_Gender=gender;
+	}
+	void setPhone(string phone){
+		m_Phone=phone;
+	}
+	void setWechat(string wechat){
+		m_Wechat=wechat;
+	}
+	void setDormitory(string dormitory){
+		m_Dormitory=dormitory;
+	}
+	bool setScore( double score){
+		if(score<0){
+			cout<<"\n\n\t\tscore cannot be less than 0."<<endl;
+		}
+		m_Score=score;
+		return true;
+	}
+	string getNo()const
+	{
+		return m_No;
+	}
+	
+	string getName()const
+	{
+		return m_Name;
+	}
+	char getGender()const
+	{
+		return m_Gender;
+	}
+	string getPhone()const
+	{
+		return m_Phone;
+	}
+	string getWechat()const
+	{
+		return m_Wechat;
+	}
+	string getDormitory()const
+	{
+		return m_Dormitory;
+	}
+	double getScore()const
+	{
+		return m_Score;
+	}
+	void Print();
+	friend ostream & operator <<(ostream & output, const Student &stu)
+	{
+		output<<"\n\t\t"<<setw(8)<<stu.m_No<<left<<"\t";
+			output<<setw(12)<<stu.m_Name<<"   ";
+			output<<setw(6);
+			if(stu.m_Gender=='M' || stu.m_Gender=='m'){
+				cout<<"Male";
+			}else if(stu.m_Gender=='F'|| stu.m_Gender=='f'){
+				cout<<"Female";
+			}else{
+				cout<<"Unknown";
+			}
+			
+			output<<"\t"<<setw(11)<<stu.m_Phone<<"\t";
+			output<<setw(5)<<stu.m_Wechat<<"\t";
+			output<<"  "<<setw(8)<<stu.m_Dormitory<<"\t"<<stu.m_Score;	
+	}
+};
+
+void Student::Print()
+{
+	cout<<"\n\t\t"<<setw(8)<<m_No<<left<<"\t";
+	cout<<setw(12)<<m_Name<<"   ";
+	cout<<setw(6);
+	if(m_Gender=='M' || m_Gender=='m'){
+		cout<<"Male";
+	}else if(m_Gender=='F'|| m_Gender=='f'){
+		cout<<"Female";
+	}else{
+		cout<<"Unknown";
+	}
+	
+	cout<<"\t"<<setw(11)<<m_Phone<<"\t";
+		cout<<setw(5)<<m_Wechat<<"\t";
+		cout<<"  "<<setw(8)<<m_Dormitory<<"\t"<<m_Score;
+	
+}
+
+class StudentMIS
+{
+	private:
+		vector<Student>STU;
+	public:
+		bool LoadDefaultData();
+		bool LoadData();
+		bool ShowData();
+		void ShowTitle();
+		bool backtoMenu();
+		void Notice();
+		bool Search();
+		bool AddStudent();
+		bool ModifyStudnet();
+		bool change(char sTemp[1024]);
+		bool Delete();
+		void SortNo();
+		void SortName();
+		void SortGender();
+		void SortWechat();
+		void SortPhone();
+		void SortDormitory();
+		void SortScore();
+		bool ClearData(){
+			cout<<"\n\t\t All the "<<STU.size()<<" data has been cleared."<<endl;
+			STU.clear();
+			return true;
+		}
+		bool SavetoFile();
+
+		
+	
+};
+int sortcount=0;
+ 
+bool comparator(const Student &p, const Student &q) 
+{ 	switch(sortcount)
+	{
+		case 1:
+			if(strcmp(p.getNo().c_str(),q.getNo().c_str()) < 0)
+			return true;
+			else return false;
+			break;
+		case 2:
+			if(strcmp(p.getNo().c_str(),q.getNo().c_str()) > 0)
+			return true;
+			else return false;
+			break;	
+		case 3:
+			if(strcmp(p.getName().c_str(),q.getName().c_str()) < 0)
+			return true;
+			else return false;
+			break;
+		case 4:
+			if(strcmp(p.getName().c_str(),q.getName().c_str()) > 0)
+			return true;
+			else return false;
+			break;
+		case 5:
+			if(p.getGender() < q.getGender())
+			return true;
+			else return false;
+			break;
+		case 6:
+			if((p.getGender() > q.getGender()))
+			return true;
+			else return false;
+			break;
+		case 7:
+			if(strcmp(p.getWechat().c_str(),q.getWechat().c_str()) < 0)
+			return true;
+			else return false;
+			break;
+		case 8:
+			if(strcmp(p.getWechat().c_str(),q.getWechat().c_str()) > 0)
+			return true;
+			else return false;
+			break;
+		case 9:
+			if(strcmp(p.getPhone().c_str(),q.getPhone().c_str()) < 0)
+			return true;
+			else return false;
+			break;
+		case 10:
+			if(strcmp(p.getPhone().c_str(),q.getPhone().c_str()) > 0)
+			return true;
+			else return false;
+			break;
+		case 11:
+			if(strcmp(p.getDormitory().c_str(),q.getDormitory().c_str()) < 0)
+			return true;
+			else return false;
+			break;
+		case 12:
+			if(strcmp(p.getDormitory().c_str(),q.getDormitory().c_str()) > 0)
+			return true;
+			else return false;
+			break;
+		case 13:
+			if(p.getScore() < q.getScore())
+			return true;
+			else return false;
+			break;
+		case 14:
+			if(p.getScore() > q.getScore() )
+			return true;
+			else return false;
+			break;
+	}		
+} 
+void StudentMIS::SortScore(){
+	cout<<"\n\t\tTo sort the students by there student Score."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=13;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=14;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+void StudentMIS::SortDormitory	(){
+	cout<<"\n\t\tTo sort the students by there student Dormitory."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=11;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=12;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+void StudentMIS::SortPhone(){
+	cout<<"\n\t\tTo sort the students by there student Phone."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=9;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=10;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+
+void StudentMIS::SortWechat	(){
+	cout<<"\n\t\tTo sort the students by there student Wechat."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=7;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=8;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+void StudentMIS::SortGender	(){
+	cout<<"\n\t\tTo sort the students by there student Gender."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=5;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=6;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+
+void StudentMIS::SortName(){
+	cout<<"\n\t\tTo sort the students by there student Name."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=3;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=4;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+void StudentMIS::SortNo(){
+	cout<<"\n\t\tTo sort the students by there student Numbers."<<endl;
+	cout<<"\n\t\tPress Enter to short in ASC order, others in DESC order: ";
+		cin.sync();
+		if(cin.peek()=='\n'){
+			sortcount=1;
+			sort(STU.begin(), STU.end(), comparator);	
+		}else{
+			sortcount=2;
+			sort(STU.begin(), STU.end(), comparator);
+		} 
+	cin.sync();
+	ShowData(); 		
+}
+bool StudentMIS::SavetoFile(){
+	cout<<"\n\t\twrite to the file"<<endl;
+	ofstream outfile;
+	outfile.open("stu.txt");
+	if(!outfile){
+		cout<<"failed"<<endl;
+	}
+	outfile.clear();
+		vector<Student>::iterator it;
+	outfile<<"\n\t\tStuNo\t\tName\t     Gender\t   Wechar\tPhone\t Dormitory    Score\n";
+		for(it=STU.begin();it!=STU.end();it++)
+		{
+			outfile<<*it;
+		}
+		outfile.close();
+		return true;
+}
+bool StudentMIS::Delete(){
+	char sTemp[1024]={'\0'};
+		do{	
+		Notice();
+		cout<<"\n\n\t\tTo delete student,we need to find them first."<<endl;
+		cout<<"please input information of the student to be deleted : ";
+		getchar();
+		cin.sync();
+		cin.clear();
+		int j=0;
+		cin.getline(sTemp,1024,'\n');
+		if(strcmp(sTemp,"000")==0){
+			break;
+		}
+		vector<Student>::iterator it;
+		ShowTitle();
+		for(it=STU.begin();it!=STU.end();it++)
+		{
+			if(it->getNo()==sTemp){
+					j++;
+				cout<<*it;				
+			}else if(it->getName()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getWechat()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getPhone()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getDormitory()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getGender()==toupper(sTemp[0])){
+				j++;
+				cout<<*it;
+			}else if(it->getScore()==atof(sTemp) ){
+				j++;
+				cout<<*it;
+			}
+		}
+		cout<<"\n\n\t\t\tThere are "<<j<<" student of \""<<sTemp<<"\""<<endl;
+		break;
+	}while(1);
+	//................delete data here............................................
+	
+		
+	string a,b,c,d,e;
+		char gender;
+		char n[1024]={'\0'};
+		double score;
+	vector<Student>::iterator it;
+	
+	while(1)
+	{	
+		Notice();
+		int j=0;
+		cin.sync();
+		cin.clear();
+		cout<<"\n\t\tPress ENTER to delete all or input the student No: ";
+		cin.getline(n,1024,'\n');
+		
+		if(strcmp(n,"000")==0){
+			break;
+		}
+			
+			if(strcmp(n,"\n"))
+			{					
+				for(it=STU.begin();it<=STU.end();it++)
+				{	
+						if(it->getNo()==sTemp){
+							j++;
+							STU.erase(it);
+						}else if(it->getName()==sTemp){
+							j++;
+							STU.erase(it);
+						}else if(it->getWechat()==sTemp){
+							j++;
+							STU.erase(it);
+						}else if(it->getPhone()==sTemp){
+							j++;
+							STU.erase(it);
+						}else if(it->getDormitory()==sTemp){
+							j++;
+							STU.erase(it);
+						}else if(it->getGender()==toupper(sTemp[0])){
+							j++;
+							STU.erase(it);
+						}else if(it->getScore()==atof(sTemp) ){
+							j++;
+							STU.erase(it);
+						}
+				
+				}
+				cout<<"\n\t\tThere are "<<j<<" students deleted with \""<<sTemp<<"\""<<endl;
+		
+		}else{
+		 strcpy (sTemp,n);
+				for(it=STU.begin();it<=STU.end();it++)
+				{	
+						if(it->getNo()==n){
+							j++;
+							STU.erase(it);
+						}else if(it->getName()==n){
+							j++;
+							STU.erase(it);
+						}else if(it->getWechat()==n){
+							j++;
+							STU.erase(it);
+						}else if(it->getPhone()==n){
+							j++;
+							STU.erase(it);
+						}else if(it->getDormitory()==n){
+							j++;
+							STU.erase(it);
+						}else if(it->getGender()==toupper(n[0])){
+							j++;
+							STU.erase(it);
+						}else if(it->getScore()==atof(n) ){
+							j++;
+							STU.erase(it);
+						}
+				
+				}
+				cout<<"\n\t\tThere are "<<j<<" students deleted with Student NO \""<<sTemp<<"\""<<endl;
+		
+		}
+	}
+	backtoMenu();
+}
+bool StudentMIS::change(char sTemp[1024])
+{
+	
+
+		string a,b,c,d,e;
+		char gender;
+		double score;
+		
+	vector<Student>::iterator it;
+	if(getchar()=='\n'){
+		cout<<"\n\t\tInput Student No: ";
+		getchar();
+		cout<<"\n\t\tInput Student Name: ";
+		getchar();
+		cout<<"\n\t\tInput Student Gender: ";
+		getchar();
+		cout<<"\n\t\tInput Student Phone No: ";
+		getchar();
+		cout<<"\n\t\tInput Student Wechat No: ";
+		getchar();
+		cout<<"\n\t\tInput Student Dormitory: ";
+		getchar();
+		cout<<"\n\t\tInput Student Score: ";
+		getchar();
+			
+			for(it=STU.begin();it!=STU.end();it++)
+			{
+				if(it->getNo()==sTemp){					
+					cout<<*it;				
+				}else if(it->getName()==sTemp){
+					cout<<*it;
+				}else if(it->getWechat()==sTemp){
+					cout<<*it;
+				}else if(it->getPhone()==sTemp){
+					cout<<*it;
+				}else if(it->getDormitory()==sTemp){
+					cout<<*it;
+				}else if(it->getGender()==toupper(sTemp[0])){
+					cout<<*it;
+				}else if(it->getScore()==atof(sTemp) ){
+					cout<<*it;
+				}
+			}
+			cout<<"\n\n\t\t\tThe students with Student No \""<<sTemp<<"\"has been changed."<<endl;
+			return ModifyStudnet();
+		
+	}else
+	for(it=STU.begin();it!=STU.end();it++)
+		{				
+			if(it->getNo()==sTemp){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);																	
+			}else if(it->getName()==sTemp){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);			
+			}else if(it->getWechat()==sTemp){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);					
+			}else if(it->getPhone()==sTemp){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);					
+			}else if(it->getDormitory()==sTemp){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);					
+			}else if(it->getGender()==toupper(sTemp[0])){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);				
+			}else if(it->getScore()==atof(sTemp) ){
+					cout<<"\n\t\tInput Student No: ";
+						cin>>a;
+						it->setNo(a);	
+					cout<<"\n\t\tInput Student Name: ";
+						cin>>b;
+						it->setName(b);	
+					cout<<"\n\t\tInput Student Gender: ";
+						cin>>gender;
+						while(1)
+						{
+							if(gender=='M' || gender=='F'){
+								it->setGender(gender);
+								break;
+							}
+							cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+							cin.sync();
+							cin.clear();
+							cin>>gender;
+						}
+					cout<<"\n\t\tInput Student Phone No: ";
+						cin>>c;
+						it->setPhone(c);
+					cout<<"\n\t\tInput Student Wechat No: ";
+						cin>>d;
+						it->setWechat(d);
+					cout<<"\n\t\tInput Student Dormitory: ";
+						cin>>e;
+						it->setDormitory(e);				
+					cout<<"\n\t\tInput Student Score: ";
+						cin>>score;
+						it->setScore(score);				
+			}
+		}
+			ShowData();
+	backtoMenu();
+}
+bool StudentMIS::ModifyStudnet(){
+	char sTemp[1024]={'\0'};
+		do{	
+		Notice();
+		cout<<"\n\t\tTo modify students, we need to find them first."<<endl;
+		cout<<"\n\n\t\tplease input the students any data: ";
+		cin.sync();
+		cin.clear();
+		int j=0;
+		cin.getline(sTemp,1024,'\n');
+		if(strcmp(sTemp,"000")==0){
+			break;
+		}
+		vector<Student>::iterator it;
+		ShowTitle();
+		for(it=STU.begin();it!=STU.end();it++)
+		{
+			if(it->getNo()==sTemp){
+					j++;
+				cout<<*it;				
+			}else if(it->getName()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getWechat()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getPhone()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getDormitory()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getGender()==toupper(sTemp[0])){
+				j++;
+				cout<<*it;
+			}else if(it->getScore()==atof(sTemp) ){
+				j++;
+				cout<<*it;
+			}
+		}
+		cout<<"\n\n\t\t\tThere are "<<j<<" student of \""<<sTemp<<"\""<<endl;
+		break;
+	}while(1);
+	//................modify data here............................................
+		char m[1024];
+		cout<<"\n\n\t\tPress ENTER to modify all or input the Student No: ";
+		cin>>m;
+		if(m[0]=='\n'){
+			cout<<"\n\t\tYou are going to change all the above students."<<endl;
+			change(sTemp);			
+		}else{
+			cout<<"\n\t\tYou are going to change all the students with Student No \""<<m<<"\""<<endl;
+			cout<<"\n\n\t\tInput the information to be changed. if make no change Press the ENTER key."<<endl;
+			change(m);
+		}
+		
+	
+
+
+}
+bool StudentMIS::AddStudent(){
+	while(1)
+	{
+		Notice();
+		string a,b,c,d,e;
+		char gender;
+		int cnt=0;
+		double score;
+		cin.sync();
+		cin.clear();
+		cout<<"\n\n\t\tInput Studnet No: ";
+		cin>>a;
+			if(a=="000"){
+				backtoMenu();break;
+			}
+		cout<<"\n\t\tInput Studnet Name: ";cin>>b;
+		cout<<"\n\t\tInput Studnet Gender(M/F): ";cin>>gender;
+			while(1){
+				if(gender=='M' || gender=='F'){
+					break;
+				}
+				cout<<"\n\n\\t\t\tInvalid.Please input \'M\' or \'F\': ";
+				cin.sync();
+				cin.clear();
+				cin>>gender;
+			}
+		cout<<"\n\t\tInput Studnet Phone: ";cin>>c;
+		cout<<"\n\t\tInput Studnet Wechat: ";cin>>d;
+		cout<<"\n\t\tInput Studnet Dormitory: ";cin>>e;
+		cout<<"\n\t\tInput Studnet Score: ";cin>>score;
+		Student s(a,b,gender,c,d,e,score);
+		STU.push_back(s);
+		ShowTitle();
+		s.Print();
+	}
+	
+}
+
+void StudentMIS::Notice(){
+	cout<<"\n\n\t\tNOTICE: 000 to Return to the menu."<<endl;
+}
+bool StudentMIS::Search(){
+	
+	do{
+		Notice();
+		char sTemp[1024]={'\0'};
+		
+		cout<<"\n\n\t\tplease input the student any data: ";
+		cin.sync();
+		cin.clear();
+		int j=0;
+		cin.getline(sTemp,1024,'\n');
+		if(strcmp(sTemp,"000")==0){
+			break;
+		}
+		vector<Student>::iterator it;
+	
+		ShowTitle();
+		for(it=STU.begin();it!=STU.end();it++)
+		{
+			if(it->getNo()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getName()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getWechat()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getPhone()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getDormitory()==sTemp){
+				j++;
+				cout<<*it;
+			}else if(it->getGender()==toupper(sTemp[0])){
+				j++;
+				cout<<*it;
+			}else if(it->getScore()==atof(sTemp) ){
+				j++;
+				cout<<*it;
+			}
+		}
+		cout<<"\n\n\t\t\tThere are "<<j<<" student of \""<<sTemp<<"\""<<endl;
+	}while(1);
+	
+	
+}
+void StudentMIS::ShowTitle(){
+	cout<<"\n\t\tStuNo\t\tName\t     Gender\t   Wechar\tPhone\t Dormitory    Score"<<endl;
+}
+bool StudentMIS::ShowData()
+{
+
+	if(STU.size()==0){
+		cout<<"\n\t\tThere is no data"<<endl;
+		return false;
+	}
+	vector<Student>::iterator it;
+	
+	for(it=STU.begin();it!=STU.end();it++)
+	{
+		it->Print();
+	}
+	        
+	return true;
+	
+}
+bool StudentMIS	::backtoMenu(){
+	cout<<"\n\n\t\t\tPRESS ANY KEY TO RETURN TO THE MENU.";
+	cin.clear();
+	cin.sync();
+	getchar();
+	return true;
+}
+bool StudentMIS::LoadData()
+{	
+	string filename="stu.txt";
+	cout<<"\n\t\tPress Enter to load default or input the file name: ";
+	cin.sync();
+	cin.clear();
+	fstream fin;
+	while(cin.peek()=='\n' || cin>>filename){
+		if(filename==""){
+			LoadDefaultData();
+		}
+		
+		fin.open(filename.c_str(),ios::in);
+		if(!fin){
+			cout<<"\n\t\tFile "<<filename<<" opened failed."<<endl;
+			cout<<"\n\t\tPress Enter to load default or input a file: ";
+			cin.clear();
+			cin.sync();
+			fin.clear();
+			filename="";
+		}else{
+			cout<<"\n\t\tFile "<<filename<<" opened."<<endl;
+			break;
+		}
+	}
+	char removeline[1024];
+	string a,b,c,d,e;
+	char gender;
+	int cnt=0;
+	double score;
+	fin.getline(removeline,1024,'\n');
+	while(!fin.eof())
+	{cnt++;
+		fin>>a;
+		fin>>b;
+		fin>>gender;
+		fin>>c;
+		fin>>d;
+		fin>>e;
+		fin>>score;
+		Student s(a,b,gender,c,d,e,score);
+		STU.push_back(s);
+	}
+	fin.close();
+	cout<<"\n\t\tThere are total "<<cnt<<" Student loaded From "<<filename<<" file."<<endl;
+	
+	return true;
+}
+
+bool StudentMIS::LoadDefaultData()
+{
+	
+	string filename="stu.txt";
+	fstream fin("stu.txt",ios::in);
+	if(!fin)
+	{
+		cout<<"\n\t\tFile stu.txt open failed"<<endl;
+		return false;
+	}else{
+		cout<<"\n\t\tFile stu.txt open Success"<<endl;
+	}
+	char removeline[1024];
+	string a,b,c,d,e;
+	char gender;
+	int cnt=0;
+	double score;
+	fin.getline(removeline,1024,'\n');
+	while(!fin.eof())
+	{cnt++;
+		fin>>a;
+		fin>>b;
+		fin>>gender;
+		fin>>c;
+		fin>>d;
+		fin>>e;
+		fin>>score;
+		Student s(a,b,gender,c,d,e,score);
+		STU.push_back(s);
+	}
+	fin.close();
+	cout<<"\n\t\tThere are total "<<cnt<<" Student loaded From stu.txt file."<<endl;
+	backtoMenu();
+	return true;
+}
+
+
